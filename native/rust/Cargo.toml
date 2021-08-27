@@ -1,0 +1,9 @@
+[package]
+name = "native_lib_rust"
+version = "0.1.0"
+edition = "2018"
+[lib]
+crate_type = ["cdylib"]
+
+[dependencies]
+libc = "0.2"
