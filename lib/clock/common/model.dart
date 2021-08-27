@@ -4,80 +4,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'model.freezed.dart';
 
-// class ClockModel extends ChangeNotifier {
-//   bool _is24HourFormat = true;
-//   bool get is24HourFormat => _is24HourFormat;
-//   set is24HourFormat(bool is24HourFormat) {
-//     if (_is24HourFormat != is24HourFormat) {
-//       _is24HourFormat = is24HourFormat;
-//       notifyListeners();
-//     }
-//   }
-//
-//   String get location => _location;
-//   String _location = "Guangzhou, GD";
-//   set location(String location) {
-//     if (location != _location){
-//       _location = location;
-//       notifyListeners();
-//     }
-//   }
-//
-//   num get temperature => _convertFromCelsius(_temperature);
-//   num _temperature = 22.0;
-//   set temperature(num temperature){
-//     temperature = _convertToCelsius(temperature);
-//     if (_temperature != temperature) {
-//       _temperature = temperature;
-//       _low = _temperature - 3.0;
-//       _height = _temperature + 4.0;
-//       notifyListeners();
-//     }
-//   }
-//
-//   /// Daily hight temperature
-//   num get high => _convertFromCelsius(_high);
-//   num _high = 26.0;
-//   set high(num high){
-//     high = _convertToCelsius(high);
-//     if (high!=_high){
-//       _high = high;
-//       notifyListeners();
-//     }
-//   }
-//
-//   num get low => _convertFromCelsius(_low);
-//   num _low = 19.0;
-//   set low(num low){
-//     low = _convertToCelsius(low);
-//     if (low != _low){
-//       _low = low;
-//       notifyListeners();
-//     }
-//   }
-//
-//   WeatherCondition get weatherCondition => _weatherCondition;
-//   WeatherCondition _weatherCondition = WeatherCondition.sunny;
-//   set weatherCondition(WeatherCondition weatherCondition) {
-//     if (weatherCondition != _weatherCondition) {
-//       _weatherCondition = weatherCondition;
-//       notifyListeners();
-//     }
-//   }
-//
-//   num _convertFromCelsius(num degreesCelsius){
-//     switch(unit){
-//       case TemperatureUnit.fahrenheit:
-//         return (degrees - 32.0) * 5.0 / 9.0;
-//       case TemperatureUnit.celsius:
-//       default:
-//         return degrees;
-//         break;
-//     }
-//   }
-//
-// }
-
 num _convertToCelsius(num degrees) {
   return (degrees - 32.0) * 5.0 / 9.0;
 }
@@ -156,7 +82,14 @@ class WeatherCondition with _$WeatherCondition {
         WeatherCondition.windy(),
       ];
 
-// String get weatherString => this.when
+  String get weatherString => this.when(
+      cloudy: () => "cloudy",
+      foggy: () => "foggy",
+      rainy: () => "rainy",
+      snowy: () => "snowy",
+      sunny: () => "sunny",
+      thunderstorm: () => "thunderstorm",
+      windy: () => "windy");
 }
 
 @freezed
