@@ -38,15 +38,21 @@ class _ClockCustomizerState extends State<_ClockCustomizer> {
   @override
   void initState() {
     super.initState();
-    _locationSubject.stream.debounceTime(Duration(milliseconds: 300));
+    final bloc = BlocProvider.of<ClockModelBloc>(context);
+    _locationSubject.stream
+        .debounceTime(Duration(milliseconds: 300))
+        .listen((String location) {
+      bloc.add(ClockModelEvent.setLocation(location));
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ClockModelBloc, ClockModelState>(
-      builder: (context, state) =>
-          state.when(() => Container(
-            color: Colors.white,
-          ), loaded: (loaded) {
+      builder: (context, state) => state.when(
+          () => Container(
+                color: Colors.white,
+              ), loaded: (loaded) {
         final bloc = BlocProvider.of<ClockModelBloc>(context);
         final clock = Center(
           child: AspectRatio(
@@ -106,8 +112,7 @@ class _ClockCustomizerState extends State<_ClockCustomizer> {
           icon: Icon(Icons.settings),
           tooltip: 'Configure clock',
           onPressed: () {
-            Scaffold.of(context)
-                .openEndDrawer();
+            Scaffold.of(context).openEndDrawer();
             bloc.add(ClockModelEvent.setConfigButtonShown(false));
           },
         );
@@ -170,7 +175,7 @@ class _ClockCustomizerState extends State<_ClockCustomizer> {
           child: Column(
             children: <Widget>[
               _textField(model.location, 'Location', (String location) {
-                bloc.add(ClockModelEvent.setLocation(location));
+                _locationSubject.add(location);
               }),
               _textField(model.temperatureString, 'Temperature',
                   (String temperature) {

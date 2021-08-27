@@ -24,16 +24,16 @@ class ClockModelBloc extends Bloc<ClockModelEvent, ClockModelState> {
   Stream<ClockModelState> mapEventToState(
     ClockModelEvent event,
   ) async* {
-    // final weather = await _api.getWeatherFor();
     final currentState = state;
 
     yield* event.when(
       initialize: () async* {
+        final weather = await _api.getWeatherFor();
         yield ClockModelState.loaded(
           ClockModel(
             is24HourFormat: true,
             location: "Guangzhou",
-            temperature: 28,
+            temperature: num.parse(weather.currentConditions.first.celsius),
             high: 30,
             low: 26,
             weatherCondition: WeatherCondition.rainy(),
