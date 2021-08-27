@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_playground/clock/common/api/weather_api.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'bloc/clock_model_bloc.dart';
 import 'model.dart';
@@ -22,11 +23,23 @@ class ClockCustomizer extends StatelessWidget {
   }
 }
 
-class _ClockCustomizer extends StatelessWidget {
+class _ClockCustomizer extends StatefulWidget {
   final ClockBuilder _clock;
 
   _ClockCustomizer(this._clock, {Key? key}) : super(key: key);
 
+  @override
+  _ClockCustomizerState createState() => _ClockCustomizerState();
+}
+
+class _ClockCustomizerState extends State<_ClockCustomizer> {
+  final PublishSubject<String> _locationSubject = PublishSubject<String>();
+
+  @override
+  void initState() {
+    super.initState();
+    _locationSubject.stream.debounceTime(Duration(milliseconds: 300))
+  }
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ClockModelBloc, ClockModelState>(
@@ -45,7 +58,7 @@ class _ClockCustomizer extends StatelessWidget {
                   color: Theme.of(context).unselectedWidgetColor,
                 ),
               ),
-              child: _clock(loaded),
+              child: widget._clock(loaded),
             ),
           ),
         );
