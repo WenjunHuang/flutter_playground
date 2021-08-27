@@ -38,7 +38,7 @@ class _ClockCustomizerState extends State<_ClockCustomizer> {
   @override
   void initState() {
     super.initState();
-    _locationSubject.stream.debounceTime(Duration(milliseconds: 300))
+    _locationSubject.stream.debounceTime(Duration(milliseconds: 300));
   }
   @override
   Widget build(BuildContext context) {
