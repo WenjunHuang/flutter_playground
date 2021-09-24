@@ -252,12 +252,12 @@ class Palette extends StatefulWidget {
   _PaletteState createState() => _PaletteState();
 }
 
-Map<ClockColor,Color> resolvePalette(Brightness brightness,bool vibrant){
+Map<ClockColor, Color> resolvePalette(Brightness brightness, bool vibrant) {
   final palette = Map.of(Palette.base);
 
   if (brightness == Brightness.light) {
     palette.addAll(Palette.light);
-    switch(paletteMode){
+    switch (paletteMode) {
       case PaletteMode.vibrant:
         palette.addAll(Palette.vibrantLight);
         break;
@@ -273,16 +273,23 @@ Map<ClockColor,Color> resolvePalette(Brightness brightness,bool vibrant){
     }
   } else {
     palette.addAll(Palette.dark);
-    switch(paletteMode){
+    switch (paletteMode) {
       case PaletteMode.vibrant:
         palette.addAll(Palette.vibrantDark);
         break;
       case PaletteMode.subtle:
         palette.addAll(Palette.subtleDark);
         break;
-
+      case PaletteMode.adaptive:
+        if (vibrant) {
+          palette.addAll(Palette.vibrantDark);
+        } else {
+          palette.addAll(Palette.subtleDark);
+        }
+        break;
     }
   }
+  return palette;
 }
 
 class _PaletteState extends State<Palette> {
@@ -294,7 +301,7 @@ class _PaletteState extends State<Palette> {
     _vibrant = true;
   }
 
-  set vibrant(bool value){
+  set vibrant(bool value) {
     if (_vibrant == value) return;
     setState(() {
       _vibrant = value;
@@ -303,9 +310,12 @@ class _PaletteState extends State<Palette> {
 
   bool get vibrant => _vibrant;
 
+  Map<ClockColor,Color> resolve(BuildContext context)=>
+      resolvePalette(Theme.of(context).brightness,_vibrant);
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return widget.builder(context,resolve(context));
   }
 }
 
