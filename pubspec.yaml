@@ -32,6 +32,7 @@ dev_dependencies:
 dependency_overrides:
   meta: 1.7.0
   analyzer: 2.1.0
+  characters: 1.2.0
 
 flutter:
   uses-material-design: true
