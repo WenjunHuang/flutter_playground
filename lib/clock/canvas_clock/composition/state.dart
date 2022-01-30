@@ -54,6 +54,14 @@ class _ClockState extends State<Clock> with TickerProviderStateMixin {
     );
   }
 
+  Animation<double> get backgroundWaveAnimation{
+    return CurvedAnimation(
+      parent: backgroundWaveController,
+      curve: waveCurve,
+      reverseCurve: waveCurve.flipped,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return CompositedClock(
