@@ -210,3 +210,6 @@ class _ClockCustomizerState extends State<_ClockCustomizer> {
     ));
   }
 }
+String enumToString<T>(T item) {
+  return item.toString().split('.').last.split('(').first;
+}

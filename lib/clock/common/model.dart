@@ -113,6 +113,3 @@ class TemperatureUnit with _$TemperatureUnit {
       ];
 }
 
-String enumToString<T>(T item) {
-  return item.toString().split('.').last.split('(').first;
-}

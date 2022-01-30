@@ -1,18 +1,27 @@
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_playground/clock/common/api/api.dart';
+import 'package:flutter_playground/clock/canvas_clock/style/palette.dart';
 
+import 'composition/animated.dart';
+import 'customizer/customizer.dart';
 
+const customizationFlowMode = CustomizationFlow.manual;
 const debugSemantics = false;
 const ballEvery = 60;
 
+const PaletteMode paletteMode = PaletteMode.adaptive;
+
 void main() {
   runApp(
-    RepositoryProvider<WeatherApi>(
-      create: (context)=>WeatherApi(Dio()),
-      child: ClockCustomizer((model)=>Palette()),
-    )
+    Customizer(
+      mode: customizationFlowMode,
+      builder: (context, model) =>Palette(
+        builder: (context,palette) {
+          return AnimatedClock(
+            model:model,
+            palette:palette,
+          );
+        }
+      ),
+    ),
   );
 }

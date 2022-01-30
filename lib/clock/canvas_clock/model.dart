@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_playground/clock/common/common.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'model.freezed.dart';
 
 class ClockModel extends ChangeNotifier {
   bool get is24HourFormat => _is24HourFormat;
@@ -40,11 +42,13 @@ class ClockModel extends ChangeNotifier {
   }
 
   /// Daily high temperature, for example '26'
-  num _high=  26.0;
+  num _high = 26.0;
+
   num get high => _convertFromCelsius(_high);
+
   set high(num high) {
     high = _convertFromCelsius(high);
-    if (high != _high){
+    if (high != _high) {
       _high = high;
       notifyListeners();
     }
@@ -52,14 +56,44 @@ class ClockModel extends ChangeNotifier {
 
   /// Daily low temperature, for example '19'.
   num _low = 19.0;
+
   num get low => _convertFromCelsius(_low);
-  set low(num low){
+
+  set low(num low) {
     low = _convertFromCelsius(low);
-    if (low != _low){
+    if (low != _low) {
       _low = low;
       notifyListeners();
     }
   }
+
+  /// Weather condition
+  WeatherCondition _weatherCondition = WeatherCondition.sunny;
+
+  WeatherCondition get weatherCondition => _weatherCondition;
+
+  set weatherCondition(WeatherCondition weatherCondition) {
+    if (weatherCondition != _weatherCondition) {
+      _weatherCondition = weatherCondition;
+      notifyListeners();
+    }
+  }
+
+  String get weatherString => enumToString(weatherCondition);
+
+  String get temperatureString {
+    return '${temperature.toStringAsFixed(1)}$unitString';
+  }
+
+  String get highString {
+    return '${high.toStringAsFixed(1)}$unitString';
+  }
+
+  String get lowString {
+    return '${low.toStringAsFixed(1)}$unitString';
+  }
+
+  String get unitString => unit.when(fahrenheit: () => '°F', celsius: () => '°C');
 
   num _convertFromCelsius(num degreesCelsius) => unit.when(fahrenheit: () => 32.0 + degreesCelsius * 9.0 / 5.0, celsius: () => degreesCelsius);
 
@@ -86,4 +120,26 @@ enum WeatherCondition {
   sunny,
   thunderstorm,
   windy,
+}
+
+String enumToString<T>(T item) {
+  return item.toString().split('.').last.split('(').first;
+}
+
+@freezed
+class TemperatureUnit with _$TemperatureUnit {
+  const TemperatureUnit._();
+
+  factory TemperatureUnit.fahrenheit() = Fahrenheit;
+
+  factory TemperatureUnit.celsius() = Celsius;
+
+  String get unitString => this.when(fahrenheit: () => '°F', celsius: () => '°C');
+
+  String get value => this.when(fahrenheit: () => "${(Fahrenheit).toString()}", celsius: () => "${(Celsius).toString()}");
+
+  static List<TemperatureUnit> get values => [
+        TemperatureUnit.fahrenheit(),
+        TemperatureUnit.celsius(),
+      ];
 }
